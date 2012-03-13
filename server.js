@@ -1,7 +1,12 @@
-var app = require('express').createServer();
+var express = require('express');
+var app = express.createServer();
+
+
+app.use(require('connect').bodyDecoder());
 
 app.post('/', function(req, res){
-  console.log(req.params);
+  req.accepts('application/json');
+  console.log(req.body);
   res.send('Hello World');
 });
 
