@@ -1,7 +1,8 @@
-var http = require('http');
+var app = require('express').createServer();
 
-http.createServer(function (req, res) {
+app.post('/', function(req, res){
   console.log(req);
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World\n');
-}).listen(80, '127.0.0.1');
+  res.send('Hello World');
+});
+
+app.listen(80);
