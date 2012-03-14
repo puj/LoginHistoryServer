@@ -1,4 +1,14 @@
 Prereqs:
 Express : Using 1.0.7
 Connect : Using 0.5.8
+
+
 This will be the node.js socket server for an android app which logs in and sees its login history
+
+TODOS:
+- Change routing on current login endpoint
+- Add registration endpoint
+- Setup Mongodb on server
+- Add registration credentials to mongo
+- Create a genuine cookie
+
