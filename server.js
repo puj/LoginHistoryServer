@@ -15,17 +15,58 @@ app.configure(function(){
 
 
 
-app.get('/',function(req,res){
+app.get('/',function (req,res){
+  res.redirect('register');
+});
+
+app.get('/login',function(req,res){
   	res.render('login', { }, function(err,data){
   		res.end(data);
   	});
-
-	loginProvider.registerUser("puj","lksdf",function(err,data){
-		console.log(err + " : " + JSON.stringify(data));
-	});
-
 });
 
+app.get('/register',function(req,res){
+    res.render('register', { }, function(err,data){
+      res.end(data);
+    });
+});
+
+
+app.post('/login', function (req,res){
+  req.accepts('application/json');
+
+  // Get the credentials from the request
+  var username = req.body.username;
+  var pwHash = req.body.pwHash;
+
+  // Try to get the user in order to check the password
+  loginProvider.getUserByUsername(username, function(err,data){
+    if(err){
+        res.send({result: 'failure', data : "Login Failure"});
+    }else{
+        // Found the user
+        if(data.pwhash === pwHash && data.username === username){
+          // User authenticated
+          // Add login 
+          var newLogin = (new Date().getTime());
+
+          //Create a session cookie here
+          var sessionCookie = Math.random()*9007199254740992;
+          var timeoutMinutes = 30;
+          data.sessionCookie = sessionCookie;
+          data.expiry = new Date(newLogin + timeoutMinutes*60000);
+
+          // Need to save the new info here.
+
+          // Give the session cookie back to the client
+          res.send({result: 'success', sessionCookie : sessionCookie});
+        }else{
+          res.send({result: 'failure', data : "Login Failure"});
+        }
+    }
+  });
+
+});
 
 app.post('/register',function(req, res){
 	req.accepts('application/json');
