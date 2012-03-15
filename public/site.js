@@ -32,6 +32,7 @@ function register(){
 	  function(data){
 	  	if(data.result == "success"){	
 	  		alert("Congratulations, " + username +", you are now registered");
+	  		window.location.href = '/login';
 	  	}else{
 	  		alert("Sorry, that " + username + " is not available");
 	  	}

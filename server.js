@@ -47,18 +47,32 @@ app.post('/login', function (req,res){
         // Found the user
         if(data.pwhash === pwHash && data.username === username){
           // User authenticated
-          // Add login 
-          var newLogin = (new Date().getTime());
-
+          
           //Create a session cookie here
           var sessionCookie = Math.random()*9007199254740992;
           var timeoutMinutes = 30;
-          data.sessionCookie = sessionCookie;
-          data.expiry = new Date(newLogin + timeoutMinutes*60000);
-
+          
           // Need to save the new info here.
+          loginProvider.save(data, function(err,data){
+              if(err){
+                console.log("Save unsuccesful for : " + username);
+              }else{
+                console.log("Succesfully updated information for : " + username);
+              }
+          });
+
+          // Need to add the new login
+          var newLogin = (new Date().getTime());
+          loginProvider.addLogin(username,newLogin, function(err,data){
+            if(err){
+              console.log("Could not add new login record for : " + username);
+            }else{
+              console.log("Succesfully added new login for  : " + username);
+            }
+          });
 
           // Give the session cookie back to the client
+          res.cookie('LoginHistoryCookie', sessionCookie, { maxAge: timeoutMinutes, path: '/login'});
           res.send({result: 'success', sessionCookie : sessionCookie});
         }else{
           res.send({result: 'failure', data : "Login Failure"});
