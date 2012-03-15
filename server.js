@@ -62,13 +62,14 @@ function _redirectIfLoggedIn(request, response, callback){
   // Find our cookie
   _getCookie(request,function(cookieFound){
     if(!cookieFound){
-
+      
       // No active session
       callback();
     }else{
 
       // A cookie was found, but is it active?
       loginProvider.isSessionAlive(cookieFound, function(err,data){
+
         if(err){
 
           // Continue about your business
@@ -160,7 +161,6 @@ app.get('/register',function(req,res){
   // Make the user isn't already logged in (this is optional I guess)
   _redirectIfLoggedIn(req,res,function(){
 
-    // Session is not active, continue showing registration page
     res.render('register', { }, function(err,data){
       res.end(data);
     });
@@ -177,14 +177,24 @@ app.get('/loggedin', function(req, res){
       // Get the user object from the session cookie
       loginProvider.getUserBySessionCookie(data,function(err,userObj){
 
-        // Render the page for the user 
-        res.render('loggedin', {"username":userObj.username, "logins" : userObj.logins}, function(err,responseData){
-          if(err){
-            res.end();
-          }else{
-            res.end(responseData);  
-          }
-        }); 
+        // The userObj is valid if the user had the requested cookie
+        if(userObj){
+
+          // Render the page for the user 
+          res.render('loggedin', {"username":userObj.username, "logins" : userObj.logins}, function(err,responseData){
+            if(err){
+              res.end();
+            }else{
+              res.end(responseData);  
+            }
+          }); 
+        }else{
+
+          // This user no longer has the targeted cookie
+          res.statusCode = 302;
+          res.setHeader("Location", "/login");
+          res.end();
+        }
       });
     });
   });
@@ -215,7 +225,8 @@ app.post('/login', function (req,res){
       // This user doesn't exist, but don't tell the user (-;
       res.send({result: 'failure', data : "Login Failure"});
     }else{
-
+      console.log(data.pwHash);
+      console.log(pwHash);
         // Found the user
         if(data.pwhash === pwHash && data.username === username){
           // User authenticated
@@ -269,7 +280,7 @@ app.post('/login', function (req,res){
  *  I don't have an SMTP server laying around.
  */ 
 app.post('/register',function(req, res){
-	req.accepts('application/json');
+  req.accepts('application/json');
 
   // Get the credentials from the request
   var username = req.body.username;
@@ -294,7 +305,7 @@ app.post('/register',function(req, res){
       res.send({result : 'failure', data : "User already exists"})
     }
   });
-});	
+}); 
 
 /**
  * Clear the cookie from the browser and the database
