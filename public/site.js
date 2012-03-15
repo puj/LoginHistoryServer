@@ -57,13 +57,21 @@ function login(){
 	  function(data){
 	  	if(data.result == "success"){
 	  		// User succesfully logged in
-	  		alert(data.sessionCookie);
+	  		window.location.replace('/loggedin');
+
 	  	}else{
 	  		// Login failed
 	  		alert("Login failure.");
 	  	}
 	  }
 	);
+}
 
-
+function logout(){
+	// Try to logout
+	$.post("/logout",
+	  function(data){
+	  	window.location.replace('/login');
+	  }
+	);
 }

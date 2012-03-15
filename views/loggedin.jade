@@ -1,0 +1,17 @@
+!!! 5
+html(lang="en")
+	head
+		title LoginHistory Server
+		script(src='public/jquery.js')
+		script(src='public/site.js')
+	body
+		h1 Welcome, #{username} 	
+		a(href='', onclick='logout();return false;') logout
+			
+			
+		#container
+			#loginHistory
+				ul 
+					each login in logins
+						.login
+							= new Date(login)
