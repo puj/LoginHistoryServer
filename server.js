@@ -181,7 +181,7 @@ app.get('/loggedin', function(req, res){
         if(userObj){
 
           // Render the page for the user 
-          res.render('loggedin', {"username":userObj.username, "logins" : userObj.logins}, function(err,responseData){
+          res.render('loggedin', {"username":userObj.username, "logins" : userObj.logins.reverse()}, function(err,responseData){
             if(err){
               res.end();
             }else{
