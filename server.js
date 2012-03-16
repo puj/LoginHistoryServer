@@ -328,4 +328,27 @@ app.post('/logout', function(req,res){
 
 });
 
+/**
+ * Get an array of logins for the session cookie
+ */
+app.post('/getlogins', function(req,res){
+  req.accepts('application/json');
+
+  // Get the cookie from the request
+  var cookie = req.body.sessionCookie;
+
+  
+  if(cookie){
+
+    // Get the user obj from the cookie
+    loginProvider.getUserBySessionCookie(cookie,function(err, userObj){
+      if(userObj){
+
+        // Return the list of logins and the username, maybe to say hello?
+        res.send({logins : userObj.logins, username : userObj.username});          
+      }
+    });
+  }
+});
+
 app.listen(80);
