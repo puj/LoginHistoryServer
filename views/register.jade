@@ -1,19 +1,20 @@
 !!! 5
 html(lang="en")
-  head
-    title LoginHistory Server
-    script(src='public/jquery.js')
-    script(src='public/sha512.js')
-    script(src='public/site.js')
+  include ../public/head.jade  
   body
-    h1 Please Register
+    
     #container
-      #username
-        | Username:
-        input#txtUsername(name='username')
-      #password
-        | Password:
-        input#txtPassword(name='password',type='password')
+      h1 Register
+      | Already Registered?
+      a(href='/login') Login Here
+
+      .credentials
+        #username
+          | Username:
+          input#txtUsername(name='username')
+        #password
+          | Password:
+          input#txtPassword(name='password',type='password')
       #submit
-        input#btnRegister(name='register',type='submit',text='Register',onClick='register();return false;')
+        input#btnRegister(name='register',type='submit',value='Register',onClick='register();return false;')
         

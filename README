@@ -1,14 +1,19 @@
 Prereqs:
-Express : Using 1.0.7
-Connect : Using 0.5.8
+├─┬ connect@0.5.8
+│ └── qs@0.4.2
+├── dateformat@1.0.2-1.2.3
+├─┬ express@1.0.7
+│ ├── connect@0.5.8
+│ └── qs@0.4.2
+├─┬ jade@0.21.0
+│ ├── commander@0.5.2
+│ └── mkdirp@0.3.0
+├── markdown@0.3.1
+└─┬ mongodb@0.9.9-6
+  └── bson@0.0.4
+  
+A node.js express and jade application for authenticating a user and giving access to login timestamps.
 
-
-This will be the node.js socket server for an android app which logs in and sees its login history
-
-TODOS:
-- Change routing on current login endpoint
-- Add registration endpoint
-- Setup Mongodb on server
-- Add registration credentials to mongo
-- Create a genuine cookie
+Issues:
+ - logout should delete the cookie from the db
 

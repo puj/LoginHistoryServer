@@ -3,6 +3,7 @@ var app = express.createServer();
 var jade = require('jade');
 var LoginProvider = require('./loginprovider').LoginProvider;
 var loginProvider = new LoginProvider('localhost', 27017);
+var dateFormat = require('dateformat');
 
 app.configure(function(){
     app.set('views', __dirname + '/views');
@@ -180,8 +181,26 @@ app.get('/loggedin', function(req, res){
         // The userObj is valid if the user had the requested cookie
         if(userObj){
 
+
+          // Reverse the order of the login list
+          var readableLogins = new Array();
+          var currentLogins = userObj.logins.reverse();
+
+          for(var i in currentLogins){
+
+            // Parse the raw datetime from the list
+            var loginTime = parseInt(currentLogins[i]);
+            
+            // Convert to a pretty readable format
+            var readableLoginTime = dateFormat(new Date(loginTime));
+
+            // Recreate the list
+            readableLogins.push(readableLoginTime);
+          }
+
+
           // Render the page for the user 
-          res.render('loggedin', {"username":userObj.username, "logins" : userObj.logins.reverse()}, function(err,responseData){
+          res.render('loggedin', {"username":userObj.username, "logins" : readableLogins }, function(err,responseData){
             if(err){
               res.end();
             }else{

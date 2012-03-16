@@ -2,16 +2,21 @@
 html(lang="en")
 	head
 		title LoginHistory Server
-		script(src='public/jquery.js')
-		script(src='public/site.js')
+		include ../public/head.jade  
 	body
-		h1 Welcome, #{username} 	
-		a(href='', onclick='logout();return false;') logout
-			
+		
 			
 		#container
+
+			.logout 
+				\(
+				a(href='', onclick='logout();return false;') logout
+				\)
+			h1 Welcome, #{username} 	
+			
+			
 			#loginHistory
 				ul 
 					each login in logins
 						.login
-							= new Date(login)
+							= login
